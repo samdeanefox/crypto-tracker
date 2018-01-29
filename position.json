@@ -1,0 +1,15 @@
+{
+	"total_investment": 100.0,
+
+	"my_currencies": {
+		"BTC": {
+			"buy_price": 10.0,
+			"amount": 5.0
+		},
+		"ETH": {
+			"buy_price": 5.0,
+			"amount": 10.0
+		}
+	},
+	"watchlist": [ "XRP", "LTC", "BCH", "BTC", "VEN"]
+}
