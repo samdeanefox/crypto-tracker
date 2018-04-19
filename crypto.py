@@ -1,8 +1,11 @@
+# This script reads from position.json and tells you your gain/loss on your current possition only
+
+
 import requests
 import json
 from pprint import pprint
 
-POSITION_FILEPATH = 'position.json'
+POSITION_FILEPATH = '/Users/samfo/Desktop/crypto-accounting/current-position-tracker/position.json'
 
 def ceiling_div(top, bottom):
 	return ((top - 1) // bottom) + 1
@@ -44,7 +47,8 @@ try:
 
 # deal with exceptions by accessing the returned json and printing out why
 except requests.exceptions.HTTPError as e:
-	print "%s: %s (%s)" % (
+	pprint(e.response)
+	print "%s: %s %s" % (
 		e.response.status_code,
 		e.response.json['code'],
 		e.response.json['message']
@@ -139,12 +143,12 @@ for currency in all_currencies:
 
 # Tally totals		
 total = [0, 0, 0, 0]
+investment = my_position['total_investment']
 for data in total_data:
 	total[0] += data[0]
 	total[1] += data[1]
-	total[2] += data[2]
 	total[3] += data[3]
-total[2] = total[2] / len(total_data)
+total[2] = 100*(total[1]-investment) / investment
 table += bars + '\n'
 table += '|   TOTAL  | ----------- |' + format_to_cell(format_dollar(total[0]), 13)
 table += ' -------------- |' + format_to_cell(format_dollar(total[1]), 16)
@@ -159,7 +163,6 @@ if len(my_position['watchlist']) > 0:
 	print '        WATCHLIST\n' + watchlist_table
 
 # Print total investment info
-investment = my_position['total_investment']
 if investment > 0:
 	print 'TOTAL INVESTMENT: ' + format_dollar(investment)
 	print 'TOTAL NOW:        ' + format_dollar(total[1])
